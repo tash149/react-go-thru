@@ -1,4 +1,5 @@
 import React from 'react';
+import MeetupList from '../components/meetups/MeetupList';
 //import {useState} from 'react';
 
 const DUMMY_DATA = [
@@ -23,15 +24,19 @@ const DUMMY_DATA = [
   ];
 
 //{[<li>Item1</li>, <li>Item2</li>]}
+/*
+{DUMMY_DATA.map((meetup)=>{
+                return <li key={meetup.id}>{meetup.title}</li>
+            })} Note that key should always be present when outputting data
+*/
+
 
 function AllMeetupsPage(){
     return (
     <section>
         <h1>All Meetups</h1>
         <ul>
-            {DUMMY_DATA.map((meetup)=>{
-                return <li key={meetup.id}>{meetup.title}</li>
-            })}
+            <MeetupList meetups={DUMMY_DATA}/>
         </ul>
     </section>);
 }
