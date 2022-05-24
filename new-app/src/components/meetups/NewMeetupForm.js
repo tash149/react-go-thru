@@ -6,7 +6,7 @@ import classes from './NewMeetupForm.module.css';
 
 //Note: see type="button" attribute in button tag
 
-function NewMeetupForm(){
+function NewMeetupForm(props){
     const titleInputRef = useRef();
     const imageInputRef = useRef();
     const addressInputRef = useRef();
@@ -30,6 +30,7 @@ function NewMeetupForm(){
         };
 
         console.log(meetupData);
+        props.onAddMeetup(meetupData);
     }
 
     return(
