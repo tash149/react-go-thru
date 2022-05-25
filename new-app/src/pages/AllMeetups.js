@@ -1,6 +1,6 @@
 import React from 'react';
 import MeetupList from '../components/meetups/MeetupList';
-//import {useState} from 'react';
+import {useState} from 'react';
 
 const DUMMY_DATA = [
     {
@@ -30,13 +30,36 @@ const DUMMY_DATA = [
             })} Note that key should always be present when outputting data
 */
 
+//fetch and response.json returns a promise
+//earror handling->complete course
 
 function AllMeetupsPage(){
+  
+    const [isLoading, setIsLoading] = useState(true);
+    const [loadedMeetups, setLoadedMeetups] = useState([]);
+
+    fetch('https://react-go-thru-default-rtdb.asia-southeast1.firebasedatabase.app/meetups.json'
+    ).then(response=>{
+      return response.json();
+    }).then(data=>{
+      setIsLoading(false);
+      setLoadedMeetups(data);
+    });
+
+    if(isLoading){
+      return(
+        <section>
+          <p>Loading...</p>
+        </section>
+      );
+    }
+
+
     return (
     <section>
         <h1>All Meetups</h1>
         <ul>
-            <MeetupList meetups={DUMMY_DATA}/>
+            <MeetupList meetups={loadedMeetups}/>
         </ul>
     </section>);
 }
