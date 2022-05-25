@@ -1,6 +1,6 @@
 import React from 'react';
 import MeetupList from '../components/meetups/MeetupList';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 const DUMMY_DATA = [
     {
@@ -32,19 +32,39 @@ const DUMMY_DATA = [
 
 //fetch and response.json returns a promise
 //earror handling->complete course
+//useState->renders page whenever we change state and this would cause the component to render indefinetly therefore ininite loop
+// useEffect-> will be able to restrict when the fetch code runs
 
 function AllMeetupsPage(){
   
     const [isLoading, setIsLoading] = useState(true);
     const [loadedMeetups, setLoadedMeetups] = useState([]);
+    useEffect(()=>{
+      setIsLoading(true);
+      fetch('https://react-go-thru-default-rtdb.asia-southeast1.firebasedatabase.app/meetups.json'
+      ).then(response=>{
+        return response.json();
+      }).then(data=>{ // firebase data is nested object
+        const meetups = [];
+        
+        for(const key in data){ //accessing the nested object for the given key
+          const meetup = { //meetup is this object, 
+            //use spread operator to copy all key value pairs of nested object into this object
+            id:key,
+            ...data[key]
+          };
+          meetups.push(meetup);
+        }
 
-    fetch('https://react-go-thru-default-rtdb.asia-southeast1.firebasedatabase.app/meetups.json'
-    ).then(response=>{
-      return response.json();
-    }).then(data=>{
-      setIsLoading(false);
-      setLoadedMeetups(data);
-    });
+        setIsLoading(false);
+        setLoadedMeetups(meetups);
+      });
+    }, []);
+     
+    //external values your effect function relies on
+    //add all values of the dependencies in the useEffect function ex setIsLoading, setIsLoadedMeetups. Here no need to since this functionality provided by react
+    //with empty array->it will only execute the function one time when the component is rendered
+    
 
     if(isLoading){
       return(
@@ -54,7 +74,7 @@ function AllMeetupsPage(){
       );
     }
 
-
+    //we expect an array in meetups=Dummydata/loaded meetups
     return (
     <section>
         <h1>All Meetups</h1>
