@@ -2,13 +2,17 @@ import { createContext, useState } from "react";
 
 const FavouritesContext = createContext({
     favourites: [],
-    totalFavourites:0
+    totalFavourites:0,
+    addFavourite: (favouriteMeetup)=>{},
+    removeFavorite: (meetupId)=>{},
+    itemIsFavourite: (meetupId)={}
 });
 
 // This component would provide the context to other components
 // It will also update context values
 //All components which are listening to context would be updated->wrapped inside FavouritesContext Provider
-function FavouritesContextProvider(props){
+// 2 exports are there
+export function FavouritesContextProvider(props){
     
     const [userFavourites, setUserFavourites] = useState();
     
@@ -31,7 +35,11 @@ function FavouritesContextProvider(props){
     }
 
     const context = {
-        favourites: userFavourites
+        favourites: userFavourites,
+        totalFavourites: userFavourites.length,
+        addFavourite: addFavouriteHandler,
+        removeFavorite: removeFavouriteHandler,
+        itemIsFavourite: itemIsFavouriteHandler
     };
 
     return( 
@@ -40,3 +48,5 @@ function FavouritesContextProvider(props){
         </FavouritesContext.Provider>
     );
 }
+
+export default FavouritesContext;
